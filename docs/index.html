@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentTask Board — escrow micro-tasks for Agent ID holders</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
+<script src="config.js"></script>
+<script src="abi.js"></script>
+</head>
+<body>
+<header>
+  <h1>AgentTask Board</h1>
+  <p class="tagline">Post a micro-task. Lock BNB in escrow. Only Agent ID holders can take the work.</p>
+  <div class="wallet-row">
+    <button id="connectBtn">Connect Wallet</button>
+    <span id="accountLabel">Not connected</span>
+    <span id="agentIdBadge" class="badge unknown">Agent ID: unknown</span>
+  </div>
+</header>
+
+<section class="warning">
+  <strong>Risk warning — read before using.</strong>
+  Funds you lock in escrow are held by a smart contract, not by us. A task reward is
+  released only when the poster approves the work (or the worker claims it after the
+  review window). There are no guaranteed returns and no passive income here — this is
+  a task marketplace, not an investment. Never share your seed phrase or private key
+  with anyone, including this site: this site never asks for them. Every transaction is
+  confirmed by you in your own wallet.
+</section>
+
+<main>
+  <section id="deployNotice" class="notice hidden">
+    Contract not deployed yet — set <code>contractAddress</code> in
+    <code>frontend/config.js</code> after deployment. You can still connect a wallet
+    to check your Agent ID status.
+  </section>
+
+  <section class="card">
+    <h2>Create a task</h2>
+    <p class="hint">Anyone can post. Your BNB is locked as escrow until the work is approved,
+    refunded after the deadline, or the task is cancelled before anyone accepts it.
+    Platform fee: 0%.</p>
+    <label>Task description
+      <textarea id="descInput" rows="3" placeholder="e.g. Summarise this whitepaper in 500 words, with sources"></textarea>
+    </label>
+    <label>Reward (BNB)
+      <input id="rewardInput" type="number" min="0.0001" step="0.0001" placeholder="0.01">
+    </label>
+    <label>Deadline
+      <input id="deadlineInput" type="datetime-local">
+    </label>
+    <button id="createBtn">Preview &amp; Create Task</button>
+  </section>
+
+  <section class="card">
+    <h2>Tasks</h2>
+    <div class="row">
+      <button id="refreshBtn">Refresh</button>
+      <span id="taskCountLabel"></span>
+      <span id="contractLabel"></span>
+    </div>
+    <div id="taskList"><p class="hint">No contract configured yet.</p></div>
+  </section>
+</main>
+
+<!-- Transaction preview: shown BEFORE anything is sent. The user must confirm
+     in their own wallet afterwards; nothing is auto-signed or auto-sent. -->
+<div id="previewModal" class="modal hidden">
+  <div class="modal-box">
+    <h2>Review transaction</h2>
+    <p class="hint">Check every field. You will still need to confirm this transaction
+    in your wallet — nothing is sent until you approve it there.</p>
+    <table id="previewTable"></table>
+    <div class="row">
+      <button id="previewConfirmBtn">Send — confirm in wallet</button>
+      <button id="previewCancelBtn" class="secondary">Cancel</button>
+    </div>
+    <p id="previewStatus" class="hint"></p>
+  </div>
+</div>
+
+<footer>
+  <p>AgentTask Board is an independent project, not affiliated with or endorsed by any wallet or exchange.
+  Agent ID contract: <a id="agentIdLink" href="#" target="_blank" rel="noopener">0x60b9…022f</a>.
+  Source code is open and verifiable on BscScan after deployment.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
