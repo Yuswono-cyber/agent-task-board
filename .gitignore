@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build artifacts (regenerable)
+artifacts/
+cache/
+typechain-types/
+
+# Secrets — NEVER commit keys, mnemonics, or .env files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+**/*keypair*.json
+**/*secret*.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
